@@ -18,7 +18,6 @@ import java.awt.event.WindowEvent;
 import java.rmi.Naming;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
-import java.rmi.registry.Registry;
 import java.rmi.server.ExportException;
 import java.time.Instant;
 
@@ -42,7 +41,7 @@ public class CollaborativeWhiteboardApp {
             // Assert correct port number.
             try{
                 port = Integer.parseInt(args[1]);
-                Utils.portCheck(port);
+                Utils.verifyPort(port);
             } catch (Exception e){
                 JOptionPane.showMessageDialog(null, "Invalid port number '" + port +"'.");
                 System.exit(0);
@@ -58,7 +57,7 @@ public class CollaborativeWhiteboardApp {
             // Create server and bind to local registry.
             final WhiteboardManager manager = new WhiteboardManager(name);
             try{
-                Registry reg = LocateRegistry.createRegistry(port);
+                LocateRegistry.createRegistry(port);
                 String serverName = "//" + ip + ":" + port.toString() + "/Server";
                 Naming.rebind(serverName, manager);
             } catch (ExportException e){

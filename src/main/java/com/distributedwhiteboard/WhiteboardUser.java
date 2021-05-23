@@ -24,7 +24,6 @@ import java.util.Random;
 
 public class WhiteboardUser extends UnicastRemoteObject implements IWhiteboardUser, Remote {
 
-    private IWhiteboardManager server;
     private IMessageController messageController;
     private String name = "";
     private WhiteboardGUI gui = null;
@@ -43,7 +42,7 @@ public class WhiteboardUser extends UnicastRemoteObject implements IWhiteboardUs
         // Assert correct port number.
         try{
             port = Integer.parseInt(args[1]);
-            Utils.portCheck(port);
+            Utils.verifyPort(port);
         } catch (Exception e){
             JOptionPane.showMessageDialog(null, "Invalid port number '" + port +"'.");
             System.exit(0);

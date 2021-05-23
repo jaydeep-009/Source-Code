@@ -7,7 +7,6 @@ Class for user helper for manager of whiteboard server.
 import com.distributedwhiteboard.iface.IWhiteboardUser;
 import com.distributedwhiteboard.impl.WhiteboardManager;
 
-import java.rmi.RemoteException;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.Set;

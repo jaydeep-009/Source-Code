@@ -27,18 +27,9 @@ public class WhiteboardManager extends UnicastRemoteObject implements IWhiteboar
     // Helper object to interact with users.
     private WhiteboardUserHelper userHelper;
     private ArrayList<IWhiteboardShape> shapes = new ArrayList<IWhiteboardShape>();
-    private ArrayList<String> clients = new ArrayList<>();
     private String currFile = "";
     private JFrame jframe;
-    private JList clientList;
-    private JPanel panel;
-    private JPanel titlePanel;
-    private JButton saveButton;
-    private JButton loadButton;
-    private JButton removeButton;
-    private JButton saveAsButton;
-    private JToolBar toolBar;
-    private JList testList;
+    private JList<String> clientList;
     private Boolean saved = true;
     private String name;
 
@@ -417,7 +408,7 @@ public class WhiteboardManager extends UnicastRemoteObject implements IWhiteboar
      */
     public void showUsers() throws RemoteException {
 
-        DefaultComboBoxModel userModel = new DefaultComboBoxModel();
+        DefaultComboBoxModel<String> userModel = new DefaultComboBoxModel<String>();
 
         for (String name : getUserNameList()) {
             userModel.addElement(name);

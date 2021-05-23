@@ -9,7 +9,6 @@ import java.awt.event.ActionListener;
 import java.awt.font.GlyphVector;
 
 import java.awt.image.BufferedImage;
-import java.time.Instant;
 import java.util.ArrayList;
 
 public class Utils {
@@ -112,7 +111,7 @@ public class Utils {
      * Method asserts a port is valid or RMI registry.
      * @param port Port number.
      */
-    public static void portCheck(int port){
+    public static void verifyPort(int port){
         // Check valid port number.
         if (port < PORT_MIN || port > PORT_MAX) {
             JOptionPane.showMessageDialog(null, "Invalid port number. Please choose a port in range [" + Integer.toString(PORT_MIN)

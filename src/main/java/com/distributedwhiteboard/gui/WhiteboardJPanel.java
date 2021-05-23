@@ -24,35 +24,30 @@ public class WhiteboardJPanel extends JPanel {
 
     public ArrayList<IWhiteboardShape> shapes;
     public Point drawStart, drawEnd;
-    private IWhiteboardUser user;
-    private Color currColour = Color.BLACK;
-    private Color prevColour = Color.BLACK;
+    private Color currentColour = Color.BLACK;
+    private Color previousColour = Color.BLACK;
     private Boolean erasing = false;
-    private Boolean currFilled = false;
-    private Boolean prevFilled = false;
-    private WhiteboardGUI hostGUI;
-
+    private Boolean currentFilled = false;
+    private Boolean previousFilled = false;
     // Current shape for drawing.
-    private Shapes currShape = Shapes.RECTANGLE;
+    private Shapes currentShape = Shapes.RECTANGLE;
 
     // Current text for drawing.
-    private String currText = "";
+    private String currentText = "";
 
     /**
      * Constructor.
      *
      * @param user    User that hosts whiteboard.
-     * @param shapes  Shapes to initialise whiteboard with.
+     * @param shapes  Shapes to initialize whiteboard with.
      * @param hostGUI Class that contains JFrame that hosts panel.
      */
     public WhiteboardJPanel(IWhiteboardUser user, ArrayList<IWhiteboardShape> shapes, WhiteboardGUI hostGUI) {
 
         this.shapes = shapes;
-        this.hostGUI = hostGUI;
-        this.user = user;
         this.setBackground(Color.WHITE);
 
-        // Initialise mouse listener for drawing.
+        // Initialize mouse listener for drawing.
         this.addMouseListener(new MouseAdapter() {
 
             public void mousePressed(MouseEvent e) {
@@ -67,7 +62,7 @@ public class WhiteboardJPanel extends JPanel {
                 Shape newShape;
 
                 // Switch for what shape to draw.
-                switch (currShape) {
+                switch (currentShape) {
                     case LINE:
                         newShape = new Line2D.Double(drawStart.x, drawStart.y,
                                 e.getX(), e.getY());
@@ -82,7 +77,7 @@ public class WhiteboardJPanel extends JPanel {
                         break;
                     case TEXT:
 
-                        newShape = Utils.generateShapeFromText(new Font("TimesRoman", Font.BOLD, 20), currText, e.getX(), e.getY());
+                        newShape = Utils.generateShapeFromText(new Font("TimesRoman", Font.BOLD, 20), currentText, e.getX(), e.getY());
                         break;
                     case ROUNDRECT:
                         newShape = drawRoundRectangle(drawStart.x, drawStart.y,
@@ -100,17 +95,17 @@ public class WhiteboardJPanel extends JPanel {
 
                 try {
                     // Always fill text
-                    if (currShape == Shapes.TEXT) {
-                        shapes.add(new WhiteboardShape(user, newShape, currColour, true));
+                    if (currentShape == Shapes.TEXT) {
+                        shapes.add(new WhiteboardShape(user, newShape, currentColour, true));
 
                         // Send shape to server.
-                        user.getMessageController().addShape(newShape, currColour, true);
+                        user.getMessageController().addShape(newShape, currentColour, true);
                     } else {
 
-                        shapes.add(new WhiteboardShape(user, newShape, currColour, currFilled));
+                        shapes.add(new WhiteboardShape(user, newShape, currentColour, currentFilled));
 
                         // Send shape to server.
-                        user.getMessageController().addShape(newShape, currColour, currFilled);
+                        user.getMessageController().addShape(newShape, currentColour, currentFilled);
                     }
 
                 } catch (RemoteException ex) {
@@ -198,8 +193,8 @@ public class WhiteboardJPanel extends JPanel {
      * Restores whiteboard draw settings after erase.
      */
     private void restoreSettings() {
-        this.currFilled = this.prevFilled;
-        this.currColour = this.prevColour;
+        this.currentFilled = this.previousFilled;
+        this.currentColour = this.previousColour;
         this.erasing = false;
     }
 
@@ -215,19 +210,19 @@ public class WhiteboardJPanel extends JPanel {
             this.restoreSettings();
         }
 
-        this.currShape = shape;
+        this.currentShape = shape;
     }
 
     public void setCurrText(String text) {
-        this.currText = text;
+        this.currentText = text;
     }
 
     public void setFill() {
-        this.currFilled = !this.currFilled;
+        this.currentFilled = !this.currentFilled;
     }
 
     public void setCurrColour() {
-        this.currColour = JColorChooser.showDialog(null, "Pick a colour", Color.BLACK);
+        this.currentColour = JColorChooser.showDialog(null, "Pick a colour", Color.BLACK);
     }
 
     /**
@@ -235,11 +230,11 @@ public class WhiteboardJPanel extends JPanel {
      */
     public void eraser() {
         this.erasing = true;
-        this.prevColour = this.currColour;
-        this.currColour = Color.WHITE;
-        this.prevFilled = this.currFilled;
-        this.currFilled = Boolean.TRUE;
-        this.currShape = Shapes.RECTANGLE;
+        this.previousColour = this.currentColour;
+        this.currentColour = Color.WHITE;
+        this.previousFilled = this.currentFilled;
+        this.currentFilled = Boolean.TRUE;
+        this.currentShape = Shapes.RECTANGLE;
     }
 
     /**

@@ -13,7 +13,6 @@ import com.distributedwhiteboard.iface.IWhiteboardUser;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.net.URL;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 
@@ -22,7 +21,7 @@ public class WhiteboardGUI implements IWhiteboardGUI {
     IWhiteboardUser user;
     private JPanel boardContainer;
     private JPanel panel1;
-    private JList clientList;
+    private JList<String> clientList;
     private JButton rectangleButton;
     private JButton ellipseButton;
     private JButton lineButton;
@@ -38,7 +37,6 @@ public class WhiteboardGUI implements IWhiteboardGUI {
     private JButton starButton;
     private WhiteboardJPanel whiteboardJPanel;
     public JFrame jFrame;
-    private DefaultComboBoxModel clientModel;
 
     /**
      * Constructor.
@@ -213,7 +211,7 @@ public class WhiteboardGUI implements IWhiteboardGUI {
      * @param clientNames List of usernames
      */
     public void updateUserList(ArrayList<String> clientNames) {
-        DefaultComboBoxModel clientModel = new DefaultComboBoxModel();
+        DefaultComboBoxModel<String> clientModel = new DefaultComboBoxModel<String>();
         for (String name : clientNames) {
             clientModel.addElement(name);
         }
