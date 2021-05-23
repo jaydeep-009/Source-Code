@@ -6,7 +6,6 @@ Class hosts the whiteboard GUI.
 
 import com.distributedwhiteboard.constants.Shapes;
 import com.distributedwhiteboard.gui.WhiteboardJPanel;
-import com.distributedwhiteboard.iface.IWhiteboardGUI;
 import com.distributedwhiteboard.iface.IWhiteboardShape;
 import com.distributedwhiteboard.iface.IWhiteboardUser;
 
@@ -16,7 +15,7 @@ import java.awt.event.*;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 
-public class WhiteboardGUI implements IWhiteboardGUI {
+public class WhiteboardGUI {
 
     IWhiteboardUser user;
     private JPanel boardContainer;
@@ -63,9 +62,6 @@ public class WhiteboardGUI implements IWhiteboardGUI {
      * @throws RemoteException
      */
     private void startGUI() throws RemoteException {
-
-        // Set button icons.
-        setIcons();
 
         whiteboardJPanel = new WhiteboardJPanel(this.user, this.user.getMessageController().getAllShapes(), this);
         boardContainer.add(whiteboardJPanel);
@@ -170,21 +166,6 @@ public class WhiteboardGUI implements IWhiteboardGUI {
      */
     private void clearWhiteboard() throws RemoteException {
         this.user.getMessageController().clearWhiteboard();
-    }
-
-    /**
-     * Method sets icon images for whiteboard.
-     */
-    private void setIcons() {
-        String[] files = {"rectangle.gif", "ellipse.gif", "line.gif",
-                "cwheel2.png", "text.gif", "eraser.gif", "roundRect.gif", "star.png"};
-
-        JButton[] buttons = {rectangleButton, ellipseButton, lineButton, colourButton,
-                                textButton, eraserButton, roundButton, starButton};
-
-        for (int i = 0; i < files.length; i++) {
-            buttons[i].setIcon(new ImageIcon(ClassLoader.getSystemResource(files[i])));
-        }
     }
 
     /**
