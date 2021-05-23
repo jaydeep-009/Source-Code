@@ -24,9 +24,10 @@ import java.util.Random;
 
 public class WhiteboardUser extends UnicastRemoteObject implements IWhiteboardUser, Remote {
 
-    private IMessageController messageController;
-    private String name = "";
-    private WhiteboardGUI gui = null;
+	private static final long serialVersionUID = -2956778517254700259L;
+	private IMessageController messageController;
+    private String userName = "";
+    private WhiteboardGUI whiteboardGUI = null;
 
     public static void main(String args[]) throws RemoteException, MalformedURLException, NotBoundException, ServerNotActiveException {
 
@@ -48,9 +49,9 @@ public class WhiteboardUser extends UnicastRemoteObject implements IWhiteboardUs
             System.exit(0);
         }
 
-        String name = JOptionPane.showInputDialog("Please choose your username: ");
+        String userName = JOptionPane.showInputDialog("Please choose your username: ");
 
-        if (name == null || name.equals("")) {
+        if (userName == null || userName.equals("")) {
             JOptionPane.showMessageDialog(null, "No username given. Application shutting down.");
             System.exit(0);
         }
@@ -58,7 +59,7 @@ public class WhiteboardUser extends UnicastRemoteObject implements IWhiteboardUs
             // Connect to server.
             String serverName = "//" + ip + ":" + port.toString() + "/Server";
             IWhiteboardManager server = (IWhiteboardManager) Naming.lookup(serverName);
-            IWhiteboardUser client = new WhiteboardUser(server, name);
+            IWhiteboardUser client = new WhiteboardUser(server, userName);
 
             // Run GUI in separate thread.
             Thread t = new Thread(new Runnable() {
@@ -85,16 +86,16 @@ public class WhiteboardUser extends UnicastRemoteObject implements IWhiteboardUs
     /**
      * Constructor.
      * @param server Server to connect to.
-     * @param name Username.
+     * @param userName Username.
      * @throws RemoteException
      * @throws ServerNotActiveException
      */
-    public WhiteboardUser(IWhiteboardManager server, String name) throws RemoteException, ServerNotActiveException {
-        this.name = name;
+    public WhiteboardUser(IWhiteboardManager server, String userName) throws RemoteException, ServerNotActiveException {
+        this.userName = userName;
 
-        if (this.name == null || this.name.equals("")) {
-            Random rand = new Random(this.name.hashCode());
-            this.name = "user-" + rand.nextInt(1000);
+        if (this.userName == null || this.userName.equals("")) {
+            Random randomCode = new Random(this.userName.hashCode());
+            this.userName = "user-" + randomCode.nextInt(1000);
         }
 
         try {
@@ -106,12 +107,12 @@ public class WhiteboardUser extends UnicastRemoteObject implements IWhiteboardUs
                     break;
 
                 case DUPLICATE:
-                    JOptionPane.showMessageDialog(null, "The username " + this.name + " is taken. Application shutting down.");
+                    JOptionPane.showMessageDialog(null, "The username " + this.userName + " is taken. Application shutting down.");
                     System.exit(0);
                     break;
 
                 default:
-                    this.messageController = server.register(this);
+                    this.messageController = server.registerUser(this);
                     break;
             }
         } catch (RemoteException e) {
@@ -140,7 +141,7 @@ public class WhiteboardUser extends UnicastRemoteObject implements IWhiteboardUs
      * @throws RemoteException
      */
     public String getName() {
-        return this.name;
+        return this.userName;
     }
 
     /**
@@ -150,7 +151,7 @@ public class WhiteboardUser extends UnicastRemoteObject implements IWhiteboardUs
      * @throws RemoteException
      */
     public void receiveShape(IWhiteboardShape shape) throws RemoteException {
-        if (this.gui != null) this.gui.receiveShape(shape);
+        if (this.whiteboardGUI != null) this.whiteboardGUI.receiveShape(shape);
     }
 
     /**
@@ -159,7 +160,7 @@ public class WhiteboardUser extends UnicastRemoteObject implements IWhiteboardUs
      * @throws RemoteException
      */
     public void refreshShapes() throws RemoteException {
-        if (this.gui != null) this.gui.resyncShapes();
+        if (this.whiteboardGUI != null) this.whiteboardGUI.resyncShapes();
     }
 
     /**
@@ -168,7 +169,7 @@ public class WhiteboardUser extends UnicastRemoteObject implements IWhiteboardUs
      * @throws RemoteException
      */
     public void refreshUsernames() throws RemoteException {
-        if (this.gui != null) this.gui.updateUserList(this.getMessageController().getUsernames());
+        if (this.whiteboardGUI != null) this.whiteboardGUI.updateUserList(this.getMessageController().getUsernames());
     }
 
     /**
@@ -194,7 +195,7 @@ public class WhiteboardUser extends UnicastRemoteObject implements IWhiteboardUs
      * @throws RemoteException
      */
     public void setGUI(WhiteboardGUI gui) throws RemoteException {
-        this.gui = gui;
+        this.whiteboardGUI = gui;
     }
 
     /**

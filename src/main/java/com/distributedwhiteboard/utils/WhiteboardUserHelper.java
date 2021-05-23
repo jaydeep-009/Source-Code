@@ -22,7 +22,7 @@ public class WhiteboardUserHelper {
      */
     public WhiteboardUserHelper(WhiteboardManager server){
 
-        // Utilise a concurrency tolerant list.
+        // Utilize a concurrency tolerant list.
         this.users = Collections.newSetFromMap(new ConcurrentHashMap<IWhiteboardUser, Boolean>());
 
         this.server = server;

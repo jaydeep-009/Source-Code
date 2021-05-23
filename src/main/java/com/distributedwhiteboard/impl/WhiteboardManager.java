@@ -27,7 +27,7 @@ public class WhiteboardManager extends UnicastRemoteObject implements IWhiteboar
     // Helper object to interact with users.
     private WhiteboardUserHelper userHelper;
     private ArrayList<IWhiteboardShape> shapes = new ArrayList<IWhiteboardShape>();
-    private String currFile = "";
+    private String currentFile = "";
     private JFrame jframe;
     private JList<String> clientList;
     private Boolean saved = true;
@@ -126,7 +126,7 @@ public class WhiteboardManager extends UnicastRemoteObject implements IWhiteboar
 
         // Prompt to save changes if any.
         saveChanges();
-        this.currFile = "";
+        this.currentFile = "";
         this.shapes = new ArrayList<IWhiteboardShape>();
         globalShapeRefresh();
     }
@@ -141,12 +141,12 @@ public class WhiteboardManager extends UnicastRemoteObject implements IWhiteboar
 
         ArrayList<IWhiteboardShape> arraylist = new ArrayList<IWhiteboardShape>();
         try {
-            this.currFile = chooseFile();
-            if (currFile.equals("")) {
+            this.currentFile = chooseFile();
+            if (currentFile.equals("")) {
                 JOptionPane.showMessageDialog(null, "Unable to open file.");
                 return;
             }
-            FileInputStream fis = new FileInputStream(this.currFile);
+            FileInputStream fis = new FileInputStream(this.currentFile);
             ObjectInputStream ois = new ObjectInputStream(fis);
             arraylist = (ArrayList) ois.readObject();
             ois.close();
@@ -171,7 +171,7 @@ public class WhiteboardManager extends UnicastRemoteObject implements IWhiteboar
      * Method used to save a whiteboard under a new file.
      */
     public void saveAs() {
-        this.currFile = "";
+        this.currentFile = "";
         save();
     }
 
@@ -181,15 +181,15 @@ public class WhiteboardManager extends UnicastRemoteObject implements IWhiteboar
     public void save() {
         try {
 
-            if (this.currFile.equals("")) {
-                this.currFile = JOptionPane.showInputDialog("Please choose a filename:");
+            if (this.currentFile.equals("")) {
+                this.currentFile = JOptionPane.showInputDialog("Please choose a filename:");
             }
-            if (this.currFile == null || this.currFile.equals("")) {
+            if (this.currentFile == null || this.currentFile.equals("")) {
                 JOptionPane.showMessageDialog(null, "No filename given. File not saved.");
                 return;
             }
 
-            FileOutputStream fos = new FileOutputStream(this.currFile);
+            FileOutputStream fos = new FileOutputStream(this.currentFile);
             ObjectOutputStream oos = new ObjectOutputStream(fos);
             oos.writeObject(this.shapes);
             oos.close();
@@ -299,7 +299,7 @@ public class WhiteboardManager extends UnicastRemoteObject implements IWhiteboar
      * @return Message controller for user to communicate.
      * @throws RemoteException
      */
-    public IMessageController register(IWhiteboardUser user) throws IllegalStateException, RemoteException {
+    public IMessageController registerUser(IWhiteboardUser user) throws IllegalStateException, RemoteException {
 
         this.userHelper.addUser(user);
 
@@ -383,7 +383,7 @@ public class WhiteboardManager extends UnicastRemoteObject implements IWhiteboar
      * Returns all shapes associated with the server
      * @return ArrayList of IWhiteboardItems on the server.
      */
-    public ArrayList<IWhiteboardShape> getShapes() {
+    public ArrayList<IWhiteboardShape> getAllShapes() {
         return this.shapes;
     }
 

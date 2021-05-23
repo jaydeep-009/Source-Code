@@ -67,7 +67,7 @@ public class WhiteboardGUI implements IWhiteboardGUI {
         // Set button icons.
         setIcons();
 
-        whiteboardJPanel = new WhiteboardJPanel(this.user, this.user.getMessageController().getShapes(), this);
+        whiteboardJPanel = new WhiteboardJPanel(this.user, this.user.getMessageController().getAllShapes(), this);
         boardContainer.add(whiteboardJPanel);
 
         jFrame.add(panel1);
@@ -223,7 +223,7 @@ public class WhiteboardGUI implements IWhiteboardGUI {
      */
     public void resyncShapes() {
         try {
-            whiteboardJPanel.updateShapes(this.user.getMessageController().getShapes());
+            whiteboardJPanel.updateShapes(this.user.getMessageController().getAllShapes());
         } catch (RemoteException err) {
             JOptionPane.showMessageDialog(null, "An error has occurred" +
                     " receiving data from the server.");

@@ -20,7 +20,7 @@ public interface IWhiteboardManager extends Remote {
      * @return Message controller for user to communicate.
      * @throws RemoteException
      */
-    public IMessageController register(IWhiteboardUser user) throws RemoteException;
+    public IMessageController registerUser(IWhiteboardUser user) throws RemoteException;
 
     /**
      * Method is used by user to request to join the whiteboard.
@@ -57,7 +57,7 @@ public interface IWhiteboardManager extends Remote {
      * @return Shapes in board.
      * @throws RemoteException
      */
-    public ArrayList<IWhiteboardShape> getShapes() throws RemoteException;
+    public ArrayList<IWhiteboardShape> getAllShapes() throws RemoteException;
 
     /**
      * Method used to request all users update their current user list.

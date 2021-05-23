@@ -46,8 +46,8 @@ public class MessageController extends UnicastRemoteObject implements IMessageCo
      * @return Array list of shapes from server.
      * @throws RemoteException
      */
-    public ArrayList<IWhiteboardShape> getShapes() throws RemoteException {
-        return server.getShapes();
+    public ArrayList<IWhiteboardShape> getAllShapes() throws RemoteException {
+        return server.getAllShapes();
     }
 
     /**

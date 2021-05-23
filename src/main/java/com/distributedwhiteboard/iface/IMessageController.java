@@ -26,7 +26,7 @@ public interface IMessageController extends Remote {
      * @return Array list of shapes from server.
      * @throws RemoteException
      */
-    public ArrayList<IWhiteboardShape> getShapes() throws RemoteException;
+    public ArrayList<IWhiteboardShape> getAllShapes() throws RemoteException;
 
     /**
      * Method requests list of usernames of current users connected to whiteboard.
