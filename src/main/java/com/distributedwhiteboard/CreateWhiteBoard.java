@@ -21,23 +21,25 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.server.ExportException;
 import java.time.Instant;
 
-public class CollaborativeWhiteboardApp {
+public class CreateWhiteBoard {
 
     public static JLabel timeLabel = new JLabel("Runtime: 00:00:00    ");
     private static Long startTime;
     private static Integer port = -1;
+    private static String name;
 
     public static void main(String args[]) {
 
         try {
-            if (args.length != 2) {
+            if (args.length != 3) {
                 JOptionPane.showMessageDialog(null, "Incorrect command line arguments.\n" +
-                        "Run as \"java -jar CollaborativeWhiteboardApp.jar <serverIP> <serverPort>");
+                        "Run as \"java -jar CollaborativeWhiteboardApp.jar <serverIP> <serverPort> <userName>");
                 System.exit(0);
 
             }
             String ip = args[0];
-
+            name = args[2];
+            
             // Assert correct port number.
             try{
                 port = Integer.parseInt(args[1]);
@@ -48,11 +50,11 @@ public class CollaborativeWhiteboardApp {
             }
 
             // Get server username.
-            final String name = JOptionPane.showInputDialog("Please choose your name: ");
-            if (name == null || name.equals("")) {
-                JOptionPane.showMessageDialog(null, "No filename given. File not saved.");
-                System.exit(0);
-            }
+			/*
+			 * final String name = JOptionPane.showInputDialog("Please choose your name: ");
+			 * if (name == null || name.equals("")) { JOptionPane.showMessageDialog(null,
+			 * "No filename given. File not saved."); System.exit(0); }
+			 */
 
             // Create server and bind to local registry.
             final WhiteboardManager manager = new WhiteboardManager(name);
@@ -74,7 +76,7 @@ public class CollaborativeWhiteboardApp {
             Thread t = new Thread(new Runnable() {
                 public void run() {
                     try {
-                        IWhiteboardUser user = new WhiteboardUser(manager, name);
+                        IWhiteboardUser user = new JoinWhiteBoard(manager, name);
                         WhiteboardGUI gui = new WhiteboardGUI(user);
 
                         gui.toolBar.add(Box.createHorizontalGlue());

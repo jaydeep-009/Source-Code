@@ -22,22 +22,23 @@ import java.rmi.server.ServerNotActiveException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.Random;
 
-public class WhiteboardUser extends UnicastRemoteObject implements IWhiteboardUser, Remote {
+public class JoinWhiteBoard extends UnicastRemoteObject implements IWhiteboardUser, Remote {
 
 	private static final long serialVersionUID = -2956778517254700259L;
 	private IMessageController messageController;
-    private String userName = "";
+    private static String userName = "";
     private WhiteboardGUI whiteboardGUI = null;
 
     public static void main(String args[]) throws RemoteException, MalformedURLException, NotBoundException, ServerNotActiveException {
 
-        if (args.length != 2) {
+        if (args.length != 3) {
             JOptionPane.showMessageDialog(null, "Incorrect command line arguments.\n" +
-                    "Run as \"java -jar WhiteboardUser.jar <serverIP> <serverPort>");
+                    "Run as \"java -jar WhiteboardUser.jar <serverIP> <serverPort> <userName>");
             System.exit(0);
         }
 
         String ip = args[0];
+        userName = args[2];
         Integer port = -1;
 
         // Assert correct port number.
@@ -49,17 +50,20 @@ public class WhiteboardUser extends UnicastRemoteObject implements IWhiteboardUs
             System.exit(0);
         }
 
-        String userName = JOptionPane.showInputDialog("Please choose your username: ");
-
-        if (userName == null || userName.equals("")) {
-            JOptionPane.showMessageDialog(null, "No username given. Application shutting down.");
-            System.exit(0);
-        }
+		/*
+		 * String userName =
+		 * JOptionPane.showInputDialog("Please choose your username: ");
+		 * 
+		 * if (userName == null || userName.equals("")) {
+		 * JOptionPane.showMessageDialog(null,
+		 * "No username given. Application shutting down."); System.exit(0); }
+		 */
+        
         try {
             // Connect to server.
             String serverName = "//" + ip + ":" + port.toString() + "/Server";
             IWhiteboardManager server = (IWhiteboardManager) Naming.lookup(serverName);
-            IWhiteboardUser client = new WhiteboardUser(server, userName);
+            IWhiteboardUser client = new JoinWhiteBoard(server, userName);
 
             // Run GUI in separate thread.
             Thread t = new Thread(new Runnable() {
@@ -90,7 +94,7 @@ public class WhiteboardUser extends UnicastRemoteObject implements IWhiteboardUs
      * @throws RemoteException
      * @throws ServerNotActiveException
      */
-    public WhiteboardUser(IWhiteboardManager server, String userName) throws RemoteException, ServerNotActiveException {
+    public JoinWhiteBoard(IWhiteboardManager server, String userName) throws RemoteException, ServerNotActiveException {
         this.userName = userName;
 
         if (this.userName == null || this.userName.equals("")) {
